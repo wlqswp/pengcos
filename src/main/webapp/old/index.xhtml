@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+ 
+<f:view locale="zh">
+   <h:head>
+    <h:outputStylesheet library="css" name="style.css"/>
+     <title>#{msgs.title}</title>
+     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   </h:head>
+   <h:body>   
+   	<center>
+   	<div style="margin:auto;text-algin:center">
+   		<h:graphicImage library="images" name="logo.png" style="width:500px" />
+      <h:messages/>
+      <h:form prependId="false">
+         <h3>#{msgs.login_hint}</h3>
+         <table align="center">
+            <tr>
+               <td>#{msgs.name}:</td>
+               <td><h:inputText value="#{login.name}" id="name">
+            
+               </h:inputText>
+               </td>
+            </tr>
+            <tr>
+               <td>#{msgs.password}:</td>
+               <td><h:inputSecret value="#{login.password}" id="password"/></td>
+            </tr>
+         </table>
+         <h:commandButton value="#{msgs.login}" action="#{login.login}" >
+         </h:commandButton>
+         <h:button value="#{msgs.register}" outcome="register" />
+      </h:form>
+     <ui:remove>
+    <h:outputText id="out" value="#{login.greeting('test')}"/>
+    </ui:remove>
+   </div>      
+
+
+</center>
+   </h:body>
+</f:view>
+</html>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:upload="http://www.manorrock.com/jsf/upload"
+      xmlns:a4j="http://richfaces.org/a4j"
+	  xmlns:rich="http://richfaces.org/rich"
+	  xmlns:c="http://java.sun.com/jsp/jstl/core">
+	  
+ 
+   <h:head>
+     <title>主页设定</title>
+   </h:head>
+   <h:body>   
+		<ui:decorate template="template.xhtml">
+		 <div class="box">
+			<ui:define name="menu">
+				<ui:include src="inc.xhtml">
+					<ui:param name="page" value="cartoon"></ui:param>
+				</ui:include>
+			</ui:define>
+		
+		<h:form>
+		<h3><span>
+		<h:outputLink value="#" onclick="#{rich:component('addnewreal')}.show(); return false;">
+			添加新的卡通人物
+		 </h:outputLink></span>
+		  <a4j:commandLink value="所有的卡通人物" render="repeat" execute="@none" /> </h3>
+			<a4j:outputPanel id="scroll" layout="block"  style="width:95%;margin-top:10px;margin-left:10px;text-align:right;">
+                <rich:dataScroller for="rlist" render="repeat" maxPages="5" ignoreDupResponses="false"  
+                                    renderIfSinglePage="false" page="#{cartoon.page}" immediate="true">	
+                </rich:dataScroller>
+            </a4j:outputPanel>
+         </h:form>
+		<ul>
+			<h:panelGroup id="repeat">
+				<a4j:repeat value="#{cartoon.pageCartoonCharactors}" var="cap" rows="#{appvo.pageSize}" id="rlist" >
+	          		<li class="s120120">
+						<h:outputLink value="#" >
+							 <a4j:ajax event="click" listener="#{cartoon.setUpdate(cap.id)}" render="addnewrealform,buttons,addstatus" oncomplete="#{rich:component('addnewreal')}.show()"/>
+	        		    <h:panelGroup>
+			         		<h:graphicImage library="images" name="defaultlogo.jpg" rendered="#{cap.logo==null}" style="width:150px;height:155px;"/>
+			        		<h:graphicImage value="/imgservlet?model=rc&amp;id=#{cap.id}" rendered="#{cap.logo!=null}" style="width:150px;height:155px" />
+	                     </h:panelGroup>          
+					<span style="width:100%">#{cap.name}</span></h:outputLink>
+					</li>
+				</a4j:repeat>
+			</h:panelGroup>
+		</ul>
+		<h:form>
+		<a4j:jsFunction name="resetPopUp" render="addnewrealform,buttons,addstatus">
+            <a4j:param name="id" assignTo="#{cartoon.inputCharactor.id}" />
+              <a4j:param name="msginfo" assignTo="#{cartoon.msgInfo}" />
+        </a4j:jsFunction>
+        </h:form>
+		
+		<rich:popupPanel id="addnewreal" width="600" height="400" modal="true"  onmaskclick="#{rich:component('addnewreal')}.hide(); resetPopUp(0, '');">
+		        <f:facet name="header">
+		            <h:outputText value="添加或更新卡通人物"/>
+		        </f:facet>
+		        <f:facet name="controls">
+		            <h:outputLink value="#" onclick="#{rich:component('addnewreal')}.hide(); resetPopUp(0, ''); return false;">
+		                X
+		            </h:outputLink>
+		        </f:facet>
+		        
+		      <h:form prependId="false" >
+			      <h:panelGrid columns="3"  id="addnewrealform">
+		            <h:outputText value="名称: " />
+
+		     	    <h:inputText value="#{cartoon.inputCharactor.name}" id="name" validatorMessage="名称长度必须在3-20之间">
+		     	    	    <f:validateLength minimum="3" maximum="20" />
+		                    <f:validateRequired />
+		                    <rich:validator />
+		     	    </h:inputText>
+		     	     <rich:message for="name" />
+		     	     
+		     	    <h:outputText value="头像: " />   
+		            <rich:fileUpload style="width:300px;height:100px;float:left" fileUploadListener="#{uploadBean.uploadLogo}" id="upload" acceptedTypes="jpg, gif, png, bmp"
+		                ontyperejected="alert('Only JPG, GIF, PNG and BMP files are accepted');" maxFilesQuantity="1" >
+		                <a4j:ajax event="uploadcomplete" execute="@none" render="logox" />
+		                 
+		            </rich:fileUpload>
+		 			<h:panelGroup id="logox">
+		         		<h:graphicImage library="images" name="defaultlogo.jpg" rendered="#{uploadBean.fileUpload==null}" style="width:100px;height:100px"/>
+		        		 <a4j:mediaOutput   immediateUpload="true" element="img" mimeType="image/jpeg" rendered="#{uploadBean.fileUpload!=null}" createContent="#{uploadBean.paint}"
+                                   	 style="width:100px; height:100px;" cacheable="false">   </a4j:mediaOutput>
+                     </h:panelGroup>            
+                     
+		     	    <h:outputText value="简介: " />
+		     	    <h:inputTextarea value="#{cartoon.inputCharactor.discription}" id="desc" rows="7" cols="40" >
+		                   <rich:validator />
+		     	    </h:inputTextarea> 
+		     	    <rich:message for="desc" />        
+	      		    </h:panelGrid>
+	 				
+	 				<h:panelGroup id="buttons" >
+	 					 <h:inputHidden value="#{cartoon.inputCharactor.id}"/>
+		      			 <a4j:commandButton  value="提交" action="#{cartoon.addOrUpdateCartoon}" render="addstatus, repeat, scroll" execute="@form"/>
+		      			 <h:commandButton value="删除" actionListener="#{cartoon.deleteCartoon}" binding="#{cartoon.deleteButton}" />
+		            </h:panelGroup>	
+		          	<h:panelGroup id="addstatus" style="margin-left:10px">
+		                	 <h:outputText value="#{cartoon.msgInfo}"  />
+		 			</h:panelGroup>
+	 			 				 
+	                 <a4j:status>
+			            <f:facet name="start">
+			                <h:graphicImage library="images" name="ai.gif"  />
+			            </f:facet>
+			        </a4j:status>
+		      </h:form>
+	    </rich:popupPanel>
+
+   		 </div>
+		</ui:decorate>			
+   </h:body>
+</html>

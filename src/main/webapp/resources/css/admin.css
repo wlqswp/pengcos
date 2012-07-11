@@ -1,0 +1,41 @@
+.login
+{
+	margin:0 auto;
+	border:solid 1px #bcbcbc;
+	vertical-align:middle;  
+	padding:10px;
+	border-radius: 5px 5px 5px 5px;
+	margin-top:200px;
+	width:170px;
+}
+
+.piccelltxt
+{
+	display:block;
+	font-size:10px;
+	width:100%;
+	text-align:center;
+	text-overflow:ellipsis;
+}
+
+.piccellwrap
+{
+	border:1px solid  #d2d2d2;
+	padding:2px;
+	margin:0 auto;
+	text-align:center;
+	cursor:pointer;
+}
+.rf-ind-acpt{border:2px solid green}
+.rf-ind-rejt{border:2px solid red}
+
+
+#preview{
+	position:absolute;
+	border:1px solid #ccc;
+	background:#333;
+	padding:5px;
+	display:none;
+	color:#fff;
+	z-index:9999;
+	}

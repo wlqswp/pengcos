@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+        >
+      <ui:composition>
+      		<ul id="navlist">
+      			<c:if test="#{page=='main'}">
+		       		<li><a href="mainpage.xhtml" class="active">主页设定</a></li>
+		         </c:if>
+		         <c:if test="#{page!='main'}">
+		         	<li><a href="mainpage.xhtml" >主页设定</a></li>
+		         </c:if>
+		         
+		         <c:if test="#{page=='real'}">
+		            <li><a href="realcharactor.xhtml" class="active" title="美女自拍">真实人物设定</a> </li>
+		         </c:if>
+		         <c:if test="#{page!='real'}">
+		            <li><a href="realcharactor.xhtml" title="美女自拍">真实人物设定</a> </li>
+		         </c:if>
+		          <c:if test="#{page=='cartoon'}">
+		         	<li><a href="cartooncharactor.xhtml"  class="active" title="清纯美女">虚拟人物设定</a> </li>
+		          </c:if>
+		           <c:if test="#{page!='cartoon'}">
+		         	<li><a href="cartooncharactor.xhtml" title="清纯美女">虚拟人物设定</a> </li>
+		          </c:if>
+		           <c:if test="#{page=='pic'}">
+		     		  <li><a href="picmanagement.xhtml" class="active"  title="校园美女">图片管理</a> </li>
+		           </c:if>
+		           <c:if test="#{page!='pic'}">
+		     		  <li><a href="picmanagement.xhtml"  title="校园美女">图片管理</a> </li>
+		           </c:if>
+		           <c:if test="#{page=='user'}">
+		     		  <li><a href="membermanagement.xhtml" class="active"  title="时尚美女">用户管理</a> </li>
+		           </c:if>
+		           <c:if test="#{page!='user'}">
+		     		  <li><a href="membermanagement.xhtml"  title="时尚美女">用户管理</a> </li>
+		           </c:if>
+		           <c:if test="#{page=='other'}">
+		      		 	<li><a href="#" class="active" >其他</a> </li>
+		      	   </c:if>
+		      	    <c:if test="#{page!='other'}">
+		      	    	<li><a href="#">其他</a> </li>
+		      	    </c:if>
+		
+			</ul>
+      </ui:composition>
+</html>

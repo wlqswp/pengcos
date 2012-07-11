@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:upload="http://www.manorrock.com/jsf/upload"
+      xmlns:a4j="http://richfaces.org/a4j"
+	  xmlns:rich="http://richfaces.org/rich"
+	  xmlns:c="http://java.sun.com/jsp/jstl/core"
+	     xmlns:p="http://primefaces.org/ui">
+ 
+   <h:head>
+ 
+     <title>图片管理</title>
+         <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+           <h:outputStylesheet>
+        .panelc { width:25%; }
+        .valign { vertical-align:top; }
+        .dropTargetPanel { width: 90%; }
+        .footerClass {
+        text-align: center;
+        padding-top: 5px;
+        }
+        .rf-ind-drag{
+        font-size:11px;
+        cursor:pointer;
+        width:100px;
+        border:1px solid gray;
+        padding:2px
+        }
+        .rf-ind-acpt{border:2px solid green}
+        .rf-ind-rejt{border:2px solid red}
+    </h:outputStylesheet>
+   </h:head>
+   <h:body>   
+   
+
+
+		
+					<h:form id="form">
+					    <rich:dataTable var="realc" value="#{real.allRealCharactors}" align="center" style="width:100%">  
+					        <rich:column>  
+					            <f:facet name="header">  
+					               <rich:panel header="123123123" >
+								<rich:dropTarget acceptedTypes="real" dropValue="PHP" dropListener="#{pic.drop}" render="realc"/>
+                  		    </rich:panel>
+					            </f:facet>  
+					              <rich:panel header="123123123">
+					       		<a4j:outputPanel id="xr#{realc.id}" layout="block" styleClass="piccellwrap">
+					           		 <rich:dragSource type="real" dragValue="r_#{realc.id}" />
+					           		 <h:graphicImage value="/imgservlet?model=rc&amp;id=#{realc.id}"  style="width:120px;" rendered="#{realc.logo!=null}" />
+					            	 <h:graphicImage library="images" name="defaultlogo.jpg" rendered="#{realc.logo==null}" style="width:120px;"/>
+					  				<h:outputText value="#{realc.name}" styleClass="piccelltxt"/>
+					       		</a4j:outputPanel>
+								</rich:panel>
+					        </rich:column>  
+					    </rich:dataTable>  
+					</h:form>
+				
+			
+		
+	
+		
+   </h:body>
+</html>

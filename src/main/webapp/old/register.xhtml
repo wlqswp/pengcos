@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+   <h:head>
+       <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   	<h:outputStylesheet library="css" name="style.css"/>
+   	<h:outputScript library="js" name="jquery-1.5.1.min.js"/>
+      <title>#{msgs.title}</title>
+    
+    <script>
+    	function call()
+    	{
+    		
+    	}
+    </script>  
+      
+   </h:head>
+   <h:body>
+   	<center>
+	      <h3>Register #{login.inputMember.userId}</h3>
+	     	<div class="error"><h:messages layout="table"/></div>
+	       <h:form prependId="false">
+	       <div style="width:500px;">
+	       	
+	       	<span> #{msgs.name}</span> 
+	       		<h:inputText value="#{login.inputMember.userId}" id="userId" required="true" requiredMessage="#{msgs.error_empty_userId}"
+	       		 validator="#{login.validateUserId}" validatorMessage="#{msgs.error_userId_invalid}">
+	       			<f:validateRegex pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"></f:validateRegex>
+	       			<f:ajax event="blur" render="error_userId"/>
+	       		</h:inputText> 
+	       		<h:message for="userId" id="error_userId" style="color:red"/>
+	       		<br/>
+	       	
+	       	<span> #{msgs.password}</span>
+	       		 <h:inputSecret value="#{login.inputMember.password}" id="password" required="true" requiredMessage="#{msgs.error_empty_pwd}" >
+	       			<f:validateLength minimum="6"></f:validateLength>
+	       		</h:inputSecret><br/>
+	       	
+	       	<span>  #{msgs.password_confirm} </span>
+	       	  <h:inputSecret value="#{login.inputMember.confirmedPassword}" required="true"  id="confirmed" requiredMessage="#{msgs.error_empty_confirmedpwd}" ></h:inputSecret><br/>
+	      
+	     
+	       	  <h:commandButton value="#{msgs.submit}" action="#{login.register}"> 
+	       	  	<f:ajax execute="@form" render="@all" ></f:ajax>
+	       	  </h:commandButton>
+	  	 	  <h:commandButton value="#{msgs.cancel}" action="index" immediate="true"/>
+	  	  </div>
+	  	  </h:form>
+	  	  <input type="button" onclick="call(); return false;" value="#{msgs.cancel}" />
+	  	
+	  	 </center>
+   </h:body>
+</html>

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:upload="http://www.manorrock.com/jsf/upload"
+      xmlns:a4j="http://richfaces.org/a4j"
+	  xmlns:rich="http://richfaces.org/rich"
+	  xmlns:c="http://java.sun.com/jsp/jstl/core"
+	     xmlns:p="http://primefaces.org/ui"
+	     xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+ 
+   <h:head>  
+   	 <h:outputStylesheet library="css" name="style.css"/>
+    <h:outputStylesheet library="css" name="admin.css"/>
+	<link href="#{facesContext.externalContext.requestContextPath}/resources/js/image-zoom/jquery.imageZoom.css" rel="stylesheet" type="text/css" />
+    <script  type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/js/image-zoom/jquery.imageZoom.js" ></script>
+       <script  type="text/javascript" src="#{facesContext.externalContext.requestContextPath}/resources/js/imagepreview.js" ></script>
+     <h:outputScript>
+    	var totalSize = 0;
+    	function updatePicCellCbg(com)
+    	{
+    		$(".piccellwrap").css("border", "1px solid #bcbcbc" );
+    		if(com)
+    		$(com).parent().css("border", "2px solid #f8049a" );
+    		
+    	}
+    	
+    </h:outputScript>
+     <title>图片管理</title>
+         <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+   </h:head>
+   <h:body>   
+		#{uploadBean.test}
+           
+   <h:form prependId="false">
+   		 <a4j:jsFunction name="toLast" render="picinfo" oncomplete="switcher.previous()">
+	          <a4j:param name="index" assignTo="#{pic.index}" />
+	      </a4j:jsFunction>
+	       <a4j:jsFunction name="toNext" render="picinfo" oncomplete="switcher.next()">
+	          <a4j:param name="index" assignTo="#{pic.index}" />
+	      </a4j:jsFunction>
+	       <a4j:jsFunction name="deletePic" render="gallery,picinfo" >
+	       	 <a4j:param name="index" assignTo="#{pic.delete}" />
+	      </a4j:jsFunction>
+	<div id="header">
+			<div id="logo"><a href="#"> <h:graphicImage library="images" name="logo.gif"/></a></div>
+		    <div id="goodnav"><a href="#" target="_blank"><h:graphicImage library="images" name="top.gif"/></a></div>
+		</div>
+		<center> <!-- sometimes chrome doest not work for margin:auto -->
+		<div id="navcont">
+			<ui:insert name="menu">
+				<ui:include src="inc.xhtml">
+					<ui:param name="page" value="pic"/>
+				</ui:include>
+			</ui:insert>
+		</div>
+		</center>
+		<div id="content" class="clearfix">
+			<div id="col1" style="width:990px">
+				<div style="width:160px;float:left;border:1px solid  #d2d2d2;height:700px;overflow:auto">
+					
+					    <rich:dataTable id="realc" var="realc" value="#{pic.allRealCharactors}" align="center" style="width:100%">  
+					        <rich:column filterValue="#{pic.realFilter}"
+					         filterExpression="#{fn:containsIgnoreCase(realc.name,pic.realFilter)}">  
+					            <f:facet name="header">  
+					          		Coser
+					          		<h:inputText value="#{pic.realFilter}">
+			                            <a4j:ajax render="realc" execute="@this" event="blur" />
+			                        </h:inputText>
+			                       <h:outputLink value="#" onclick="updatePicCellCbg()">
+										显示所有无coser分类图片	
+										 <a4j:ajax event="click" listener="#{pic.setNoRealMsgs()}" render="picinfo,gallery" />
+					  				</h:outputLink>
+					            </f:facet>  
+					       		<a4j:outputPanel id="x#{realc.id}" layout="block" styleClass="piccellwrap">
+					           		 <rich:dragSource type="real" dragValue="#{realc.id}" />
+					           		 	<h:outputLink value="#" onclick="updatePicCellCbg(this)">
+											 <a4j:ajax event="click" listener="#{pic.setCurrentListForReal(realc.id)}" render="gallery, picinfo"  />
+					           				 <h:graphicImage  value="/imgservlet?model=rc&amp;id=#{realc.id}"  style="width:120px;" rendered="#{realc.logo!=null}" />
+					            	
+					  						<h:outputText value="#{realc.name}" styleClass="piccelltxt"/>
+					  					</h:outputLink>
+					       		</a4j:outputPanel>
+		
+					        </rich:column>  
+					    </rich:dataTable>  
+				</div>	
+				<div id="middiv" style="width:645px;height:700px;float:left;border:1px solid #d2d2d2;margin:0 auto;text-align:center;margin-left:10px;" >
+					<h:form enctype="multipart/form-data" id="updateform">  
+							<h:panelGroup id="picinfo" layout="block" style="height:20px;width:645px;position:absolute;color:red;z-index:9999">
+								<h:outputText value="#{pic.currentMsg.realCharactor.name}" style="float:left"/>
+								<h:outputText value="#{pic.currentMsg.catoonCharactor.name}" style="float:right"/>
+							</h:panelGroup>
+							
+							<rich:panel style="width:643px;height:550px;clear:both" >
+								 <rich:dropTarget acceptedTypes="real" dropValue="CF" dropListener="#{pic.drop}" render="picinfo"/>
+							<h:panelGroup layout="block" id="gallery" style="height:550px;">
+								<center>
+									<h:panelGrid columns="3" style="text-align:center">
+										<p:commandButton type="button" onclick="toLast(-1)"  rendered="#{pic.size>0}"
+					              			  icon="ui-icon-circle-triangle-w"/>  
+					              		<h:panelGroup>
+											<p:imageSwitch id ="images"  effect="zoom" widgetVar="switcher" slideshowAuto="false">  
+											  <ui:repeat value="#{pic.currentMsgs}" var="msg">  
+												    <p:graphicImage value="/imgservlet?model=cosmsg&amp;filename=#{msg.fileName}" lang="#{msg.picWidth},#{msg.picHeight}" />
+											  </ui:repeat>
+											</p:imageSwitch><br/>
+											<p:contextMenu for="images" style="z-index:50">  
+											    <p:menuitem value="上一张" url="javascript:void(0)" onclick="toLast(-1)" icon="ui-icon-triangle-1-w" />  
+											    <p:menuitem value="下一张" url="javascript:void(0)" onclick="toNext(1)" icon="ui-icon-triangle-1-e" />  
+											    <p:menuitem value="删除"  url="javascript:void(0)" onclick="deletePic(0)"  update="gallery, picinfo" icon="ui-icon-close"/>  
+											</p:contextMenu>  
+											<h:outputText value="#{msg.realCharactor.name}" rendered="#{msg.realCharactor!=null}"/>&nbsp;
+											<h:outputText value="#{msg.catoonCharactor.name}" rendered="#{msg.catoonCharactor!=null}"/>
+									    </h:panelGroup>
+										<p:commandButton type="button" onclick="toNext(1)"   rendered="#{pic.size>0}"
+		           					    	 icon="ui-icon-circle-triangle-e"/>  
+									</h:panelGrid>
+								</center>
+
+								<h:outputScript>
+										totalSize = 0;
+										jQuery(document).ready(function($) 
+										{
+										
+											$("#middiv").find("img").each(
+												function()
+												{
+													$(this).attr("rel", "preview");
+													$(this).css('cursor','pointer');
+													$(this).attr("href", this.src+"&amp;ori=true");
+																								
+												}
+											);
+											
+											imagePreview();
+										
+										}
+										);
+										
+									</h:outputScript>
+							</h:panelGroup>	
+						 </rich:panel>				
+						<div style="height:150px">
+					    <p:fileUpload fileUploadListener="#{pic.handleFileUpload}"  
+					            mode="advanced"   style="height:300px;overflow:auto" process="@none"
+					            update="gallery, picinfo" auto="true"   multiple="true" 
+					            sizeLimit="1000000"   
+					            allowTypes="/(\.|\/)(gif|jpe?g|png|bmp)$/" />  
+					  
+					    <p:growl id="messages" showDetail="true"/>  
+					    </div>
+					</h:form>
+				</div>	
+				<div  style="width:160px;float:right;border:1px solid #d2d2d2;height:700px;overflow:auto">
+					   <rich:dataTable var="cc" value="#{pic.allCartoonCharactors}" align="center" style="width:100%" id="cc">  
+					         <rich:column filterValue="#{pic.cartoonFilter}"
+					         filterExpression="#{fn:containsIgnoreCase(cc.name,pic.cartoonFilter)}">  
+					            <f:facet name="header">  
+					                    Cartoon
+					                    <h:inputText value="#{pic.cartoonFilter}">
+			                           		 <a4j:ajax render="cc" execute="@this" event="blur" />
+			                      	  </h:inputText>
+			                      	  <h:outputLink value="#" onclick="updatePicCellCbg()">
+										显示所有无动慢分类图片	
+										 <a4j:ajax event="click" listener="#{pic.setNoCartoonMsgs()}" render="picinfo,gallery"  />
+					  				</h:outputLink>
+					            </f:facet>  
+					       		<a4j:outputPanel layout="block" styleClass="piccellwrap">
+					       		 <rich:dragSource type="real" dragValue="#{cc.id}" />
+					       			<h:outputLink value="#" onclick="updatePicCellCbg(this)">
+										 <a4j:ajax event="click" listener="#{pic.setCurrentListForCartoon(cc.id)}" render="picinfo,gallery" />
+							           	 <h:graphicImage value="/imgservlet?model=rc&amp;id=#{cc.id}"  rendered="#{cc.logo!=null}" style="width:120px;" />
+							             <h:graphicImage library="images" name="defaultlogo.jpg" rendered="#{cc.logo==null}" style="width:120px;"/>
+							  			 <h:outputText value="#{cc.name}" styleClass="piccelltxt"/>
+							  	    </h:outputLink>
+					       		</a4j:outputPanel>
+					        </rich:column>  
+					    </rich:dataTable>  
+				</div>		
+			</div>
+		</div>	
+		</h:form>
+   </h:body>
+</html>

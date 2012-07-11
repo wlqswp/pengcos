@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="MyCosProject"
+  id="myeclipse.1342019335077"
+  context-root="/cos"
+  j2ee-spec="6.0"
+  archive="MyCosProject.war">
+  <attributes>
+    <attribute name="webrootdir" value="src/main/webapp" />
+  </attributes>
+</project-module>
+
